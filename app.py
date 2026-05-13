@@ -15,6 +15,12 @@ LIVE_UPLOAD_DIR = Path("data") / "live_uploads"
 LIVE_RESULT_DIR = Path("yolov5") / "runs" / "detect" / "live"
 LIVE_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
+class ClientApp:
+    def __init__(self):
+        self.filename = "inputImage.jpg"
+
+clApp = ClientApp()
+
 
 def get_latest_live_video_url():
     generated_videos = sorted(LIVE_RESULT_DIR.glob("*.mp4"), key=lambda path: path.stat().st_mtime, reverse=True)
@@ -22,9 +28,6 @@ def get_latest_live_video_url():
         return None
     return url_for("serve_live_result", filename=generated_videos[0].name)
 
-class ClientApp:
-    def __init__(self):
-        self.filename = "inputImage.jpg"
 
 @app.route("/")
 def home():
@@ -148,5 +151,4 @@ def predictRoute():
 
 
 if __name__ == "__main__":
-    clApp = ClientApp()
     app.run(host="0.0.0.0", port=8080, debug=True)
